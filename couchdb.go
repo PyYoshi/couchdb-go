@@ -397,7 +397,7 @@ func (db *Database) Copy(fromId string, fromRev string, toId string) (string, er
 	return getRevInfo(resp)
 }
 
-// check if document exists (without retriving it).
+// check if document exists (without retrieving it).
 func (db *Database) Exists(id string) (string, error) {
 	var headers = make(map[string]string)
 	headers["Accept"] = "application/json"
