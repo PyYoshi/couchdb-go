@@ -266,6 +266,27 @@ func TestAttachment(t *testing.T) {
 	deleteTestDb(t, dbName)
 }
 
+func TestExists(t *testing.T) {
+	dbName := createTestDb(t)
+	conn := getConnection(t)
+	db := conn.SelectDB(dbName, nil)
+	//Create a test doc
+	theDoc := TestDocument{
+		Title: "My Document",
+		Note:  "Time to read",
+	}
+	//Save it
+	theId := getUuid()
+	_, err := db.Save(theDoc, theId, "")
+	errorify(t, err)
+	//Now try to read it
+	rev, err := db.Exists(theId)
+	errorify(t, err)
+	t.Logf("Document Id: %v\n", theId)
+	t.Logf("Document Rev: %v\n", rev)
+	deleteTestDb(t, dbName)
+}
+
 func TestRead(t *testing.T) {
 	dbName := createTestDb(t)
 	conn := getConnection(t)

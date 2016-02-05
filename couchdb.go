@@ -397,6 +397,24 @@ func (db *Database) Copy(fromId string, fromRev string, toId string) (string, er
 	return getRevInfo(resp)
 }
 
+// check if document exists (without retriving it).
+func (db *Database) Exists(id string) (string, error) {
+	var headers = make(map[string]string)
+	headers["Accept"] = "application/json"
+	var url string
+	var err error
+	url, err = buildUrl(db.dbName, id)
+	if err != nil {
+		return "", err
+	}
+	resp, err := db.connection.request("HEAD", url, nil, headers, db.auth)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	return getRevInfo(resp)
+}
+
 //Fetches a document from the database.
 //Pass it a &struct to hold the contents of the fetched document (doc).
 //Returns the current revision and/or error
